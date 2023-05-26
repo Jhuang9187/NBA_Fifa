@@ -1,0 +1,62 @@
+---
+title: "NBA"
+format: html
+editor: visual
+---
+
+## NBA Stats
+
+This is a set of player stats consisting of 8 team. The stats include two point & three point percentages, overall field goal percentages, and other player stats.
+
+```{r}
+library(readxl)
+library(gt)
+y <- read_xlsx("NBA.xlsx", sheet = "players")
+as.numeric(y$...2)
+NBAdata <- gt(y)
+NBAdata <- NBAdata |>
+  cols_label(...2 = "Minutes Played", ...3 = "Points",...4 = "3 Point %",...5 = "2 Point %",...6 = "Free Throw %",...7 = "FG %", ...8=  "Assist",...9 = "RBs",...10 = "Steals",...11 = "Blocks")
+NBAdata
+#-----------------------------------------------------------
+library(stringr)
+NBAdata <- NBAdata |>
+  tab_header(
+    title = "NBA Player Stats",   
+    subtitle = "Current stats"
+)|>  
+  tab_footnote(
+    footnote = "The Offical NBA - © 2023 NBA Media Ventures, LLC. All rights reserved.",
+  )
+NBAdata
+```
+
+## FIFA Soccer
+
+This is a set of player stats for the premier league. The stats include goalkeepers identified and scoring statistics per player.
+
+```{r}
+library(readxl)
+library(gt)
+x <- read_xlsx("PLPlayerstats.xlsx")
+as.numeric(x$ "Goals Scored")
+Fifadata <- gt(x)
+
+Fifadata <- Fifadata  |>
+  tab_header(
+    title = "Premier Soccer League",
+    subtitle = "Current States"
+  ) |>
+  data_color(
+    column = "Goals Scored",
+    rows = "Goals Scored" > 20,
+    method = "auto",
+    palette = c("red", "green")
+  ) |>
+  tab_footnote(
+    footnote = "GK represents Goal keepers",
+    locations = cells_body(
+      columns = "Player Name" , rows = ends_with("GK")
+    )
+  )
+Fifadata
+```
